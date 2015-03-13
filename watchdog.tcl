@@ -115,26 +115,28 @@ proc ::restart { unit { maxiter 20 } } {
     return $ip
 }
 
+proc ::consider { unit } {
+    global WTDG
+
+    foreach ptn $WTDG(-watch) {
+	if { [string match $ptn $unit] } {
+	    return 1
+	}
+    }
+    return 0
+}
+
 proc ::check { {again -1} } {
     global WTDG
 
     fleet log INFO "Checking state of all units"
     foreach { unit host ip active sub } [fleet state] {
-	fleet log DEBUG "Unit $unit is in state ${active}/${sub} at host $ip"
-	if { [string tolower $active] eq "failed" } {
-	    set match 0
-	    foreach ptn $WTDG(-watch) {
-		if { [string match $ptn $unit] } {
-		    set match 1
-		    break
-		}
-	    }
-
-	    if { $match } {
+	if { [consider $unit] } {
+	    fleet log DEBUG "Unit $unit is in state ${active}/${sub}\
+                             at host $ip"
+	    if { [string tolower $active] eq "failed" } {
 		set ip [restart $unit]
 		fleet log NOTICE "Restarted $unit, now on host $ip"
-	    } else {
-		fleet log INFO "Unit $unit is unoperative, ignoring it"
 	    }
 	}
     }
