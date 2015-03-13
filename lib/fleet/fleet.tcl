@@ -6,7 +6,7 @@ namespace eval ::fleet {
 	variable dateLogHeader "\[%Y%m%d %H%M%S\] \[%module%\] \[%level%\] "
 	variable verboseTags   {1 CRITICAL 2 ERROR 3 WARN 4 NOTICE 5 INFO 6 DEBUG}
 	variable -fleet        "fleetctl"
-	variable -opts         "--endpoint=http://10.1.42.1:4001"
+	variable -opts         ""
     }
     namespace export {[a-z]*}
     namespace ensemble create
