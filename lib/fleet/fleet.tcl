@@ -21,10 +21,10 @@ proc ::fleet::state {} {
     fconfigure $fd -buffering line
     set header 0
     while {![eof $fd]} {
-	set l [gets $fd]
+	set l [string trim [gets $fd]]
 	if { !$header } {
 	    set header 1
-	} else {
+	} elseif { $l ne "" } {
 	    foreach {unit machine active sub} $l break
 	    foreach {host ip} [split $machine "/"] break
 	    set host [string trimright $host "."]
