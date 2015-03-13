@@ -120,6 +120,7 @@ proc ::check { {again -1} } {
 
     fleet log INFO "Checking state of all units"
     foreach { unit host ip active sub } [fleet state] {
+	fleet log DEBUG "Unit $unit is in state ${active}/${sub} at host $ip"
 	if { [string tolower $active] eq "failed" } {
 	    set match 0
 	    foreach ptn $WTDG(-watch) {
