@@ -134,7 +134,8 @@ proc ::check { {again -1} } {
 	if { [consider $unit] } {
 	    fleet log DEBUG "Unit $unit is in state ${active}/${sub}\
                              at host $ip"
-	    if { [string tolower $active] eq "failed" } {
+	    if { [string tolower $active] eq "failed" \
+		     || [string tolower $sub eq "dead"] } {
 		set ip [restart $unit]
 		fleet log NOTICE "Restarted $unit, now on host $ip"
 	    }
